@@ -1,0 +1,229 @@
+---
+title: "E.Roman_HW5.rmd"
+author: "Enid Roman"
+date: "2023-02-25"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. (Bayesian). A new test for multinucleoside-resistant (MNR) human immunodeficiency virus type 1
+(HIV-1) variants was recently developed. The test maintains 96% sensitivity, meaning that, for those
+with the disease, it will correctly report “positive” for 96% of them. The test is also 98% specific,
+meaning that, for those without the disease, 98% will be correctly reported as “negative.” MNR HIV-1
+is considered to be rare (albeit emerging), with about a .1% or .001 prevalence rate. Given the
+prevalence rate, sensitivity, and specificity estimates, what is the probability that an individual who is reported as positive by the new test actually has the disease? 
+
+```{r}
+#Event B=Positive test
+#Event A1=Actual HIV pt
+#Event A2=Actual non-HIV
+
+#Seeking P(A1 | B)
+
+#USE Bayes
+
+#P(A1 | B) =  
+#P (B|A1)P(A1) / P(B|A1)P(A1)+P(B|A2)P(A2)
+#P(B|A1)=.96
+#P(B|A2)=1-.98=.02
+#P(A1)=.001
+#P(A2)=.999
+#(.96*.001)/((.96*.001)+(.02*.999))
+
+B_A1 <- 0.96
+A1 <- 0.001
+B_A2 <- 0.02 
+A2 <- 0.999
+A1_B <- B_A1*A1/(B_A1*A1+B_A2*A2)
+A1_B 
+```
+If the median cost (consider this the best point estimate) is about $100,000 per positive case total and the test itself costs $1000 per administration, what is the total first-year cost for treating 100,000 individuals?
+
+```{r}
+Pt<-100000*.001
+Cost_test<-1000*100000
+Cost_Pt<-Pt*100000
+TotalCost<-Cost_test+Cost_Pt
+TotalCost
+
+```
+2. (Binomial). The probability of your organization receiving a Joint Commission inspection in any given month is .05. What is the probability that, after 24 months, you received exactly 2 inspections? 
+```{r}
+size <- 24
+prob <-0.05
+i<-2
+
+p1 <- dbinom(i,size,prob)
+p1
+```
+What is the probability that, after 24 months, you received 2 or more inspections?
+
+```{r}
+# 1- (P(1) +P(0))
+
+p2 <- 1- (dbinom(1,size,prob) + dbinom(0,size,prob))
+p2
+```
+What is the probability that your received fewer than 2 inspections?
+
+```{r}
+p3 <- dbinom(1,size,prob) + dbinom(0,size,prob)
+p3
+```
+What is the expected number of inspections you should have received?
+
+```{r}
+size <- 24
+prob <- 0.05
+ai <- 1 - 0.05
+p4 <- size*prob*ai
+p4
+```
+What is the standard deviation?
+
+```{r}
+sd <- sqrt(size*prob*(1-prob))
+sd
+```
+3. (Poisson). You are modeling the family practice clinic and notice that patients arrive at a rate of 10 per hour. What is the probability that exactly 3 arrive in one hour? 
+
+```{r}
+p3 <- dpois(3,10)
+p3
+```
+What is the probability that more than 10 arrive in one hour? 
+
+```{r}
+p_greater_10 <- 1-ppois(10,10)
+p_greater_10
+```
+How many would you expect to arrive in 8 hours? 
+
+```{r}
+per_hour <- 10
+8*per_hour
+```
+What is the standard deviation of the appropriate probability distribution? 
+
+```{r}
+sqrt(10)
+```
+If there are three family practice providers that can see 24 templated patients each day, what is the percent utilization and what are your recommendations? I would recommend to either hire more staff or increase working hours. 
+
+```{r}
+# 3x24=72 patients seen in 8 hours
+# From above result we can expect 80 to arrive in a day
+# utilization percent
+ 80/72*100
+```
+4. (Hypergeometric). Your subordinate with 30 supervisors was recently accused of favoring nurses. 15
+of the subordinate’s workers are nurses and 15 are other than nurses. As evidence of malfeasance, the
+accuser stated that there were 6 company-paid trips to Disney World for which everyone was eligible.
+The supervisor sent 5 nurses and 1 non-nurse. If your subordinate acted innocently, what was the
+probability he/she would have selected five nurses for the trips? 
+
+```{r}
+x<-5
+m<-15
+n<-15
+k<-6
+dhyper(x,m,n,k,log=FALSE)
+```
+How many nurses would we have expected your subordinate to send? 
+
+```{r}
+# E(X)=KM/N expected number of nurses
+
+6*15/30
+```
+How many non-nurses would we have expected your subordinate to send?
+
+```{r}
+#Expected number of nurse=3 so Expected number of #non-nurses k-E(X)
+6-3
+```
+5. (Geometric). The probability of being seriously injured in a car crash in an unspecified location is about .1% per hour. A driver is required to traverse this area for 1200 hours in the course of a year. What is the probability that the driver will be seriously injured during the course of the year?
+
+```{r}
+pgeom(1200, .001)
+```
+In the course of 15 months?
+
+```{r}
+pgeom(1500, .001)
+```
+What is the expected number of hours that a driver will drive before being seriously injured?
+
+```{r}
+#E[X]=1/p
+
+1/.001
+```
+Given that a driver has driven 1200 hours, what is the probability that he or she will be injured in the next 100 hours? 
+
+```{r}
+pgeom(100, 0.001)
+```
+6. You are working in a hospital that is running off of a primary generator which fails about once in 1000 hours. What is the probability that the generator will fail more than twice in 1000 hours? 
+
+```{r}
+1-ppois(2,1)
+```
+What is the expected value?
+
+```{r}
+#E[X]=lamda =1
+1
+```
+7. A surgical patient arrives for surgery precisely at a given time. Based on previous analysis (or a lack of knowledge assumption), you know that the waiting time is uniformly distributed from 0 to 30 minutes. What is the probability that this patient will wait more than 10 minutes? 
+
+```{r}
+q <- 10
+min <- 0
+max <- 30
+1- punif(q,min,max)
+```
+If the patient has already waited 10 minutes, what is the probability that he/she will wait at least another 5 minutes prior to being seen?
+
+```{r}
+PA<-1-punif(15,10,30)
+PB<-1-punif(10,10,30)
+PA/PB
+```
+What is the expected waiting time?
+
+```{r}
+1/2*(0+30)
+```
+
+8. Your hospital owns an old MRI, which has a manufacturer’s lifetime of about 10 years (expected value). Based on previous studies, we know that the failure of most MRIs obeys an exponential distribution. What is the expected failure time? 
+
+```{r}
+#E(x)=10 is given
+```
+
+What is the standard deviation? 
+
+```{r}
+#1/lambda=10 so lamda=
+lambda<-1/10
+
+#Std dev= Var(Lambda^2)^.5=lambda
+lambda
+```
+What is the probability that your MRI will fail after 8 years? 
+
+```{r}
+1-pexp(8,.1)
+```
+Now assume that you have owned the machine for 8 years. Given that you already owned the machine 8 years, what is the probability that it will fail in the next two years? 
+
+```{r}
+1-pexp(2,.1)
+```
+
