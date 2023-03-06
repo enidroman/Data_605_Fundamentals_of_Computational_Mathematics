@@ -1,0 +1,182 @@
+---
+title: "ERoman_HW6"
+author: "Enid Roman"
+date: "2023-03-04"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. A bag contains 5 green and 7 red jellybeans. How many ways can 5 jellybeans be withdrawn from the bag so that the number of green ones withdrawn will be less than 2?
+
+```{r}
+# For the draw that contains 1 greenjelly beans we can have 5 choose 1 where 5 jelly beans can have 1 position
+choose(5,1)
+```
+```{r}
+# For other spots must be filled with red jellybeans for the remaining for 4 spots so:
+choose(7,4)
+```
+
+```{r}
+# For the draw that contains no green jelly beans we only have red jelly beans we can do 7 red jelly beans choose 5 spots:
+choose(7,5)
+```
+
+```{r}
+# Combining the possibilites we have in total:
+paste0("The possibilities of 5 jellybeans to be withdrawn from the bag so that the number of green ones withdrawn will be less than 2 is: ",(choose(5,1) * choose(7,4)) + choose(7,5))
+```
+2. A certain congressional committee consists of 14 senators and 13 representatives. How many ways can a subcommittee of 5 be formed if at least 4 of the members must be representatives?
+
+```{r}
+# Possibilites of 4 representatives and one senator we have:
+choose(13,4) * choose(14,1)
+```
+
+```{r}
+# Possibilites with all 5 representative we have:
+choose(13,5)
+```
+```{r}
+# Total possiblites:
+paste0("Total possibilities are: ",(choose(13,4) * choose(14,1)) + choose(13,5))
+```
+3. If a coin is tossed 5 times, and then a standard six-sided die is rolled 2 times, and finally a group of three cards are drawn from a standard deck of 52 cards without replacement, how many different outcomes are possible?
+
+
+```{r}
+# A coin is tossed 5 times and the only possiblites are Heads and Tails which are 2 possiblites:
+2^5
+```
+```{r}
+# A standard six-sided die has 6 possibilities 1 to 6 and rolled 2 times:
+6^2
+```
+```{r}
+# A group of three cards drawn from a standard deck of 52 cards without replacement is 52 on first card drawn, 51 on second card drawn, and 50 on third card drawn:
+52*51*50
+```
+```{r}
+# With all 3 how many different outcomes are possible?
+paste0("Total of different outcomes possible is: ",(2^5)*(6^2)*(52*51*50))  
+```
+4. 3 cards are drawn from a standard deck without replacement. What is the probability that at least one of the cards drawn is a 3? Express your answer as a fraction or a decimal number rounded to four decimal places.
+
+```{r}
+# Probablity atleast one of the card is a 3 means P(x > 1) =
+# We have 4 cards that are a 3 
+# One of the card is a 3 
+choose(4,1) * choose(48,2)
+```
+```{r}
+# Two of the card is a 3
+choose(4,2) * choose(48,1)
+```
+
+```{r}
+# Tree of the cards is a 3 
+choose(4,3) * choose(48, 0)
+```
+```{r}
+# 3 cards drawn from a deck without replacement is 52 choose 3 so
+choose(52,3)
+```
+```{r}
+# Adding all the cards over the total cards drawn from the deck is:
+Total_Prob = (4512+288+4)/choose(52,3)
+paste0("The probability that at least one of the cards drawn is a 3 is: ",round(Total_Prob,4))
+```
+5. Lorenzo is picking out some movies to rent, and he is primarily interested in documentaries and mysteries. He has narrowed down his selections to 17 documentaries and 14 mysteries.
+
+Step 1. How many different combinations of 5 movies can he rent?
+
+```{r}
+# He has picked 17+14 31 movies to choose for 5 so 31 choose 5
+paste0("The total number of different combinations of 5 movies he can rent is: ",choose(31,5))
+```
+Step 2. How many different combinations of 5 movies can he rent if he wants at least one mystery?
+
+```{r}
+# Combinations with one mystery and 4 docs
+oNe <- choose(14,1) * choose(17,4)
+# Combinations with two mystery and 3 docs:
+two <- choose(14,2) * choose(17,3)
+# Combinations with three mystery and 2 docs:
+three <- choose(14,3) * choose(17,2)
+# Combinations with 4 mystery and 1 doc:
+four <- choose(14,4) * choose(17,1)
+# Combinations with all 5 movies being mysteries
+five <- choose(14,5)
+# All of the total is:
+paste0("The total number of different combinations of 5 movies he rent is at least one mystery is: ",oNe + two + three + four + five)
+```
+6. In choosing what music to play at a charity fund raising event, Cory needs to have an equal number of symphonies from Brahms, Haydn, and Mendelssohn. If he is setting up a schedule of the 9 symphonies to be played, and he has 4 Brahms, 104 Haydn, and 17 Mendelssohn symphonies from which to  choose, how many different schedules are possible? Express your answer in scientific notation rounding to the hundredths place.
+
+```{r}
+# 4 Brahms For 3
+choose(4,3)
+```
+```{r}
+# 104 Haydn for 3
+choose(104,3)
+```
+```{r}
+# 17 Mendelssohn for 3
+choose(17,3)
+```
+```{r}
+# Setting up a schedule of the 9 symphonies
+# Scientific notation rounding to the hundredths place
+paste0("The total number of different schedule that are possible is: ",formatC(factorial(9) * choose(4,3)*choose(104,3)*choose(17,3), format = 'e', digits=3))
+```
+7. An English teacher needs to pick 13 books to put on his reading list for the next school year, and he needs to plan the order in which they should be read. He has narrowed down his choices to 6 novels, 6 plays, 7 poetry books, and 5 nonfiction books.
+
+Step 1. If he wants to include no more than 4 nonfiction books, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place.
+
+```{r}
+# Total books are 6+6+7+5 which is 23 books
+# No more than 4 means we can only have 4 or less nonfiction books 
+# 23 - 5 = 19
+# Combinations with 1 non-fic and 19 others books then:
+# with 0 non-fic  
+zero <- choose(5,0) * choose(19,13)
+# with 1 non-fic
+one <- choose(5,1) * choose(19,12)
+# With 2 non-fic  
+two <- choose(5,2) * choose(19,11)
+# With 3 non-fic 
+three <- choose(5,3) * choose(19,10)
+# With 4 non-fic 
+four <- choose(5,4) * choose(19,9)
+paste0("Different reading schedules that are possible with no more than 4 nonfictions books: ",formatC(factorial(13) * zero+one+two+three+four,format="e", digits=3))
+```
+Step 2. If he wants to include all 6 plays, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place.
+
+```{r}
+paste0("Different reading schedules that are possible if he wants to include all 6 plays: ",formatC(factorial(13) * choose(6,6) * choose(6+7+5,7),format="e", digits=3))
+```
+8. Zane is planting trees along his driveway, and he has 5 sycamores and 5 cypress trees to plant in one row. What is the probability that he randomly plants the trees so that all 5 sycamores are next to each other and all 5 cypress trees are next to each other? Express your answer as a fraction or a decimal number rounded to four decimal places.
+
+```{r}
+paste0("Probability that Zane randomly plants the trees so that all 5 sycamores are next to each other and all 5 cypress trees are next to each other: ",round((2/choose(10,5)),4))
+```
+9. If you draw a queen or lower from a standard deck of cards, I will pay you $4. If not, you pay me $16. (Aces are considered the highest card in the deck.)
+
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places. Losses must be expressed as negative values.
+
+```{r}
+# 1 - 8/52 = 44/52
+# To lose 16 we must have 8/52
+paste0("The expected value of the proposition is: ",round((4* (44/52)) + (-16 * (8/52)),2))
+```
+Step 2. If you played this game 833 times how much would you expect to win or lose? Round your answer to two decimal places. Losses must be expressed as negative values.
+
+```{r}
+paste0("I would expect to win: ",(833 * (round((4* (44/52)) + (-16 * (8/52)),2))))
+```
+
